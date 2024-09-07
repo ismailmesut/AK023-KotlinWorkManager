@@ -35,6 +35,8 @@ android {
     }
 }
 
+val work_version = "2.9.1"
+
 dependencies {
 
     implementation(libs.androidx.core.ktx)
@@ -45,4 +47,7 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // Kotlin + coroutines
+    implementation("androidx.work:work-runtime-ktx:$work_version")
 }
