@@ -2,12 +2,15 @@ package com.ismailmesutmujde.kotlinworkmanager
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequest
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import java.util.concurrent.TimeUnit
@@ -43,5 +46,33 @@ class MainActivity : AppCompatActivity() {
             .build()
 
         WorkManager.getInstance(this).enqueue(myWorkRequest)
+
+        WorkManager.getInstance(this).getWorkInfoByIdLiveData(myWorkRequest.id).observe(this,
+            Observer {
+
+                if(it.state == WorkInfo.State.RUNNING) {
+                    println("running")
+                } else if (it.state == WorkInfo.State.FAILED) {
+                    println("failed")
+                } else if (it.state == WorkInfo.State.SUCCEEDED) {
+                    println("succeeded")
+                }
+            })
+
+        //WorkManager.getInstance(this).cancelAllWork()
+
+        // Chaining
+
+        /*
+        val oneTimeRequest : OneTimeWorkRequest = OneTimeWorkRequestBuilder<RefreshDatabase>()
+            .setConstraints(constraints)
+            .setInputData(data)
+            .build()
+
+        WorkManager.getInstance(this).beginWith(oneTimeRequest)
+            .then(oneTimeRequest)
+            .then(oneTimeRequest)
+            .enqueue()
+        */
     }
 }
